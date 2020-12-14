@@ -13,7 +13,6 @@
 
                     id="email"
                     type="text"
-                    class="validate"
                 >
                 <label for="email">Email</label>
                 <small
@@ -36,7 +35,6 @@
 
                     id="password"
                     type="password"
-                    class="validate"
                 >
                 <label for="password">Пароль</label>
                 <small
