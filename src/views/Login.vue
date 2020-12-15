@@ -76,6 +76,8 @@
 
 <script>
 import {email, required, minLength} from "vuelidate/lib/validators"
+import messages from "@/utils/messages"
+
 
 export default {
     data(){
@@ -87,6 +89,16 @@ export default {
     validations: {
         email: {email, required},
         password: {required, minLength: minLength(6)}
+    },
+    mounted(){
+        // 1) query-параметр в адресной строке сравнивается с наличием такого 
+        // параметра в файле messages(папка utils). И если он есть, то выводится toste с 
+        // сообщением взятым по ключу из файла messages
+        // 2) у $route есть объект query который отвечает за query-параметры
+        // у этого объекта есть ключ message
+        if(messages[this.$route.query.message]){
+            this.$message(messages[this.$route.query.message]);
+        }
     },
     methods: {
         submitHandler(){
