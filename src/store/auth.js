@@ -6,11 +6,12 @@ export default {
             try {
                 await firebase.auth().signInWithEmailAndPassword(email, password)
             } catch (e) {
-                console.log(e);
+                // вызываем мутацию setError (в $store) куда передаем объект e
+                commit("setError", e);
                 throw e
             }
         },
-        async register({dispatch}, {email, password, name}){
+        async register({dispatch, commit}, {email, password, name}){
             try {
                 await firebase.auth().createUserWithEmailAndPassword(email, password);
 
@@ -23,7 +24,8 @@ export default {
                 });
 
             } catch (e) {
-                console.log(e);
+                // вызываем мутацию setError (в $store) куда передаем объект e
+                commit("setError", e);
                 throw e
             }
         },
