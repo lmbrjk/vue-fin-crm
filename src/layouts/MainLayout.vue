@@ -42,6 +42,15 @@ export default {
     return {
       isShow: true
     }
+  },
+  async mounted(){
+    // 1) проверяем info в файле store/info.js
+    // если там нет значений (все значения info складываем в массив с помощью Object.keys и 
+    // проверяем этот массив на длину). Если длина массива больше 0 то значения там есть
+    // 2) Если равно 0 то вызываем метод fetchInfo
+    if(!Object.keys(this.$store.getters.info).length){
+      await this.$store.dispatch("fetchInfo");
+    }
   }
 }
 </script>
