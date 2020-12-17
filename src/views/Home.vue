@@ -34,9 +34,19 @@ export default {
   },
   data(){
     return {
-      loading: false,
+      loading: true,
       currency: null
     }
+  },
+  async mounted(){
+
+    // this.currency = await this.$store.dispatch("fetchCurrency");
+
+    this.loading = false;
+
+    // const key = process.env.VUE_CONSOLE_LOG;
+    // console.log(`${key}`);
+    
   }
 }
 </script>
