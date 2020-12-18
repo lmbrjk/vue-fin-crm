@@ -1,5 +1,12 @@
 <template>
-  <div class="app-main-layout">
+  <Loader 
+    v-if="loading"
+  />
+
+  <div 
+    v-else
+    class="app-main-layout"
+  >
     
     <Navbar 
       @switch-sidebar="isShow = !isShow"
@@ -40,7 +47,8 @@ export default {
   },
   data(){
     return {
-      isShow: true
+      isShow: true,
+      loading: true
     }
   },
   async mounted(){
@@ -51,6 +59,8 @@ export default {
     if(!Object.keys(this.$store.getters.info).length){
       await this.$store.dispatch("fetchInfo");
     }
+
+    this.loading = false;
   }
 }
 </script>

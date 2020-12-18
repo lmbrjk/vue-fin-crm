@@ -3,7 +3,11 @@
   <div class="page-title">
     <h3>Счет</h3>
 
-    <button class="btn waves-effect waves-light btn-small">
+    <button 
+      v-on:click="refreshCurrency"
+
+      class="btn waves-effect waves-light btn-small"
+    >
       <i class="material-icons">refresh</i>
     </button>
   </div>
@@ -17,9 +21,14 @@
     class="row"
   >
 
-    <HomeBill />
+    <HomeBill 
+      v-bind:rates="currency.rates"
+    />
 
-    <HomeCurrency />
+    <HomeCurrency    
+      v-bind:currencyRates="currency.rates"
+      v-bind:currencyDate="currency.date"
+    />
   </div>
 </div>
 </template>
@@ -38,14 +47,17 @@ export default {
       currency: null
     }
   },
+  methods: {
+    async refreshCurrency(){
+      this.loading = true;
+      this.currency = await this.$store.dispatch("fetchCurrency");
+      this.loading = false;
+      
+    }
+  },
   async mounted(){
-
-    // this.currency = await this.$store.dispatch("fetchCurrency");
-
+    this.currency = await this.$store.dispatch("fetchCurrency");
     this.loading = false;
-
-    // const key = process.env.VUE_CONSOLE_LOG;
-    // console.log(`${key}`);
     
   }
 }

@@ -22,7 +22,7 @@ export default new Vuex.Store({
       // записываем ключ доступа от fixer-a в переменную key
       const key = process.env.VUE_APP_FIXER;
       // загружаем данные с сайта fixer 
-      const res = fetch(`http://data.fixer.io/api/latest?access_key=${key}&symbols=USD,EUR,RUB`);
+      const res = await fetch(`http://data.fixer.io/api/latest?access_key=${key}&symbols=USD,EUR,RUB`);
       return await res.json();
     }
   },
