@@ -10,15 +10,15 @@
             >
                 <div class="input-field">
                     <input
-                        v-model.trim="name"
-                        v-bind:class="{invalid: $v.name.$dirty && !$v.name.required}"
+                        v-model.trim="categoryName"
+                        v-bind:class="{invalid: $v.categoryName.$dirty && !$v.categoryName.required}"
 
                         id="name"
                         type="text"
                     >
                     <label for="name">Название</label>
                     <span
-                        v-if="$v.name.$dirty && !$v.name.required"
+                        v-if="$v.categoryName.$dirty && !$v.categoryName.required"
                         class="helper-text invalid"
                     >
                         Введите имя категории
@@ -27,7 +27,7 @@
 
                 <div class="input-field">
                     <input
-                        v-model.trim="limit"
+                        v-model.number.trim="limit"
                         v-bind:class="{invalid: ($v.limit.$dirty && !$v.limit.required) || ($v.limit.$dirty && !$v.limit.minValue)}"
 
                         id="limit"
@@ -63,20 +63,30 @@ import {required, minValue} from "vuelidate/lib/validators"
 export default {
     data(){
         return {
-            name: '',
+            categoryName: '',
             limit: 100
         }
     },
     validations: {
-        name: {required},
+        categoryName: {required},
         limit: {required, minValue: minValue(100)}
     },
     methods: {
-        submitHandler(){
+        async submitHandler(){
             if(this.$v.$invalid){
                 this.$v.$touch();
                 return
             }
+
+
+            try{
+                const category = await this.$store.dispatch("createCategory", {
+                    categoryName: this.categoryName,
+                    limit: this.limit
+                });
+
+            } catch(e){}
+            
         }
     },
     mounted(){
