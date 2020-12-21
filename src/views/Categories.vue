@@ -5,7 +5,9 @@
         </div>
         <section>
             <div class="row">
-                <CategoryCreate />
+                <CategoryCreate 
+                    v-on:created="addNewCategory"
+                />
                 
                 <CategoryEdit />                
             </div>
@@ -20,6 +22,16 @@ import CategoryEdit from "@/components/CategoryEdit"
 export default {
     components: {
         CategoryCreate, CategoryEdit
+    },
+    data(){
+        return {
+            categories: []
+        }
+    },
+    methods: {
+        addNewCategory(category){
+            this.categories.push(category);
+        }
     }
 }
 </script>

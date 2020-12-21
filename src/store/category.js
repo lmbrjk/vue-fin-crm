@@ -10,6 +10,7 @@ export default {
 
                 const category = await firebase.database().ref(`/users/${uid}/categories`).push({categoryName, limit});
 
+                // возращаем объект для дальнейшей работы с ним
                 return {categoryName, limit, id:category.key};
 
             } catch(e){

@@ -6,11 +6,11 @@
             </div>
 
             <form
-                v-on:click.prevent="submitHandler"
+                v-on:submit.prevent="submitHandler"
             >
                 <div class="input-field">
                     <input
-                        v-model.trim="categoryName"
+                        v-model="categoryName"
                         v-bind:class="{invalid: $v.categoryName.$dirty && !$v.categoryName.required}"
 
                         id="name"
@@ -84,6 +84,18 @@ export default {
                     categoryName: this.categoryName,
                     limit: this.limit
                 });
+
+                // сбрасываем значения на дефолтные
+                this.categoryName = '';
+                this.limit = 100;
+
+                this.$v.$reset();
+
+                this.$message("Категория была создана");
+
+                // для того чтобы родительский компонент и 
+                // компонент CategoryEdit знали о создании новой категории
+                this.$emit("created", category);
 
             } catch(e){}
             
