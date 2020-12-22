@@ -44,8 +44,7 @@ export default {
                 const uid = await dispatch("getUid");
 
                 // перезаписываем имя и лимит категории
-                await firebase.database().ref(`/users/${uid}/categories/`).child(id).update({categoryName, limit});
-                this.$message("Категория обновлена");                
+                await firebase.database().ref(`/users/${uid}/categories/`).child(id).update({categoryName, limit});               
 
             } catch(e){
                 commit("setError", e);

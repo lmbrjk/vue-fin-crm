@@ -89,14 +89,12 @@ export default {
         limit: {required, minValue: minValue(100)}
     },
     watch: {
-        // при выборе в селекте категории будут показаны данные этой катгории
+        // при выборе в селекте нужной категории будут показаны данные этой катгории
         current(catId){
             const {categoryName, limit} = this.categories.find(c => c.id == catId);
 
             this.categoryName = categoryName;
             this.limit = limit;
-
-            console.log(catId);
         }
     },    
     methods: {
@@ -113,9 +111,12 @@ export default {
                     id: this.current 
                 };               
                 await this.$store.dispatch("updateCategory", categoryData);
-
-                const {categoryName, limit} = this.categories.find(c => c.id == this.current);
-
+                this.$message("Категория обновлена");
+                
+                // 1) для обновления массива categories в родительском компоненте Categories
+                // 2) это нужно для автоматического обновления отредактированного пункта в
+                // селекте без перезагрузки страницы
+                this.$emit("updateCurrentCategory", categoryData);
 
             } catch(e){}
         }
