@@ -36,7 +36,22 @@ export default {
                 commit("setError", e);
                 throw e;
             }
-        }        
+        },
+        async updateCategory({commit, dispatch}, {categoryName, limit, id}){
+            try{
+                // получаем uid пользователя для записи категории пользователю который
+                // сейчас работает с CRM
+                const uid = await dispatch("getUid");
+
+                // перезаписываем имя и лимит категории
+                await firebase.database().ref(`/users/${uid}/categories/`).child(id).update({categoryName, limit});
+                this.$message("Категория обновлена");                
+
+            } catch(e){
+                commit("setError", e);
+                throw e;
+            }
+        }       
 
     }
 }
