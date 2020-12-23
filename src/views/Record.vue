@@ -17,10 +17,14 @@
 
   <form 
     v-else
+    v-on:submit.prevent="submitHandler"
+
+
     class="form"
   >
     <div class="input-field" >
       <select
+        v-model="current"
         ref="select"
       >
         <option
@@ -37,6 +41,8 @@
     <p>
       <label>
         <input
+            v-model="choiseType"
+
             class="with-gap"
             name="type"
             type="radio"
@@ -49,6 +55,8 @@
     <p>
       <label>
         <input
+            v-model="choiseType"
+
             class="with-gap"
             name="type"
             type="radio"
@@ -60,21 +68,45 @@
 
     <div class="input-field">
       <input
+          v-model.number="amount"
+          v-bind:class="{invalid: ($v.amount.$dirty && !$v.amount.required) || ($v.amount.$dirty && !$v.amount.minValue)}"
+
           id="amount"
           type="number"
       >
       <label for="amount">Сумма</label>
-      <span class="helper-text invalid">amount пароль</span>
+      <span
+        v-if="$v.amount.$dirty && !$v.amount.required"
+
+        class="helper-text invalid"
+      >
+        Поле не может быть пустым
+      </span>
+      <span
+        v-else-if="$v.amount.$dirty && !$v.amount.minValue"
+
+        class="helper-text invalid"
+      >
+        Число не может быть меньше {{ $v.amount.$params.minValue.min }}
+      </span>
     </div>
 
     <div class="input-field">
       <input
+          v-model="description"
+          v-bind:class="{invalid: $v.description.$dirty && !$v.description.required}"
+
           id="description"
           type="text"
       >
       <label for="description">Описание</label>
       <span
-            class="helper-text invalid">description пароль</span>
+        v-if="$v.description.$dirty && !$v.description.required" 
+
+        class="helper-text invalid"
+      >
+        Поле не может быть пустым
+      </span>
     </div>
 
     <button class="btn waves-effect waves-light" type="submit">
@@ -86,24 +118,46 @@
 </template>
 
 <script>
+import {required, minValue} from "vuelidate/lib/validators"
+
 export default {
 
   data(){
     return {
       categories: [],
       select: null,
+      current: null,
       categoryName: '',
+      choiseType: "outcome",
+      amount: 1,
+      description: '',
       loading: true
+    }
+  },
+  validations: {
+    amount: {required, minValue: minValue(1)},
+    description: {required}
+  },
+  methods: {
+    async submitHandler(){
+      if(this.$v.$invalid){
+        this.$v.$touch();
+        return
+      }
+      
     }
   }, 
   async mounted(){
     this.categories = await this.$store.dispatch("fetchCategories");
     this.loading = false;
 
+    if(this.categories.length){
+      this.current = this.categories[0].id;
+    }  
 
     // несколько вариантов решения задачи синхронности
     // 1)  без setTimeout привязка к селекту materialize не будет работать т.к.
-    // после того как this.loading = false (см. на 2 строки выше)  
+    // после того как this.loading = false (см. выше)  
     // vue начинает перерисовывать часть страницы и селект к которому применяется 
     // привязка к селекту materialize не будет работать т.к. не к чему привязываться
     // т.е. селекта еще нет
@@ -117,6 +171,8 @@ export default {
     //3) 
     await this.$nextTick;    
     this.select = window.M.FormSelect.init(this.$refs.select);
+    window.M.updateTextFields();
+      
     
   },
   destroyed(){
