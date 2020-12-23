@@ -4,11 +4,32 @@
     <h3>Новая запись</h3>
   </div>
 
-  <form class="form">
+  <Loader 
+    v-if="loading"
+  />
+
+  <p 
+    v-else-if="!categories.length"
+    class="center"
+  >
+    Категорий пока что нет. <router-link to="/categories">Создайте первую</router-link>
+  </p>
+
+  <form 
+    v-else
+    class="form"
+  >
     <div class="input-field" >
-      <select>
+      <select
+        ref="select"
+      >
         <option
-        >name cat</option>
+          v-for="category of categories"
+          v-bind:key="category.id"
+          v-bind:value="category.id"
+        >
+          {{ category.categoryName }}
+        </option>
       </select>
       <label>Выберите категорию</label>
     </div>
@@ -63,3 +84,46 @@
   </form>
 </div>
 </template>
+
+<script>
+export default {
+
+  data(){
+    return {
+      categories: [],
+      select: null,
+      categoryName: '',
+      loading: true
+    }
+  }, 
+  async mounted(){
+    this.categories = await this.$store.dispatch("fetchCategories");
+    this.loading = false;
+
+
+    // несколько вариантов решения задачи синхронности
+    // 1)  без setTimeout привязка к селекту materialize не будет работать т.к.
+    // после того как this.loading = false (см. на 2 строки выше)  
+    // vue начинает перерисовывать часть страницы и селект к которому применяется 
+    // привязка к селекту materialize не будет работать т.к. не к чему привязываться
+    // т.е. селекта еще нет
+    // setTimeout( () => {
+    //   // привязка к селекту materialize для функционирования селекта
+    //   this.select = window.M.FormSelect.init(this.$refs.select);    
+    // }, 0);
+    // 2)  this.$nextTick(() => {
+    //   this.select = window.M.FormSelect.init(this.$refs.select);
+    // });
+    //3) 
+    await this.$nextTick;    
+    this.select = window.M.FormSelect.init(this.$refs.select);
+    
+  },
+  destroyed(){
+    if(this.select && this.select.destroy){
+        this.select.destroy();
+    }
+  }
+
+}
+</script>
