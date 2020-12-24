@@ -159,9 +159,9 @@ export default {
       
       // проверка в computed свойстве canCreateRecord чтобы затраты не превышали количество денег у пользователя
       // если this.canCreateRecord возвращает true - то затраты не превышают сумму на счету
-      if(this.canCreateRecord){
-        
+      if(this.canCreateRecord){        
         try {
+          // записываем в БД созданную запись
           await this.$store.dispatch("createRecord", {
             category: this.category,
             amount: this.amount,
@@ -171,13 +171,25 @@ export default {
             date: new Date().toJSON()
           });
 
-        } catch(e){}
-        
+          // если введенное значение доход, то
+          // складываем общую сумму счета с введнным значением, если
+          // введенное значение расход, то вычитаем его от общей суммы счета
+          const bill = this.type === "income" 
+            ? this.info.bill + this.amount
+            : this.info.bill - this.amount
+
+          await this.$store.dispatch("updateInfo", {bill});
+
+          this.$message("Запись создана");
+          this.$v.reset();
+          this.amount = 1;
+          this.description = "";
+
+        } catch(e){}        
 
       } else {
         this.$message(`На счёте не достаточно ${this.amount - this.info.bill}` );
       }
-
     }
   }, 
   async mounted(){
@@ -209,7 +221,7 @@ export default {
   },
   destroyed(){
     if(this.select && this.select.destroy){
-        this.select.destroy();
+      this.select.destroy();
     }
   }
 
