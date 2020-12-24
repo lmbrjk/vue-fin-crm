@@ -41,7 +41,7 @@
     <p>
       <label>
         <input
-            v-model="choiseType"
+            v-model="type"
 
             class="with-gap"
             name="type"
@@ -55,7 +55,7 @@
     <p>
       <label>
         <input
-            v-model="choiseType"
+            v-model="type"
 
             class="with-gap"
             name="type"
@@ -119,6 +119,7 @@
 
 <script>
 import {required, minValue} from "vuelidate/lib/validators"
+import {mapGetters} from "vuex"
 
 export default {
 
@@ -128,7 +129,7 @@ export default {
       select: null,
       current: null,
       categoryName: '',
-      choiseType: "outcome",
+      type: "outcome",
       amount: 1,
       description: '',
       loading: true
@@ -138,6 +139,17 @@ export default {
     amount: {required, minValue: minValue(1)},
     description: {required}
   },
+  computed: {
+    // из хранилища забираем свойство info и его свойство bill
+    ...mapGetters(["info"]),
+    canCreateRecord(){
+      if(this.type === "income"){
+        return true;
+      }
+
+      return this.info.bill >= this.amount;
+    }
+  },
   methods: {
     async submitHandler(){
       if(this.$v.$invalid){
@@ -145,6 +157,27 @@ export default {
         return
       }
       
+      // проверка в computed свойстве canCreateRecord чтобы затраты не превышали количество денег у пользователя
+      // если this.canCreateRecord возвращает true - то затраты не превышают сумму на счету
+      if(this.canCreateRecord){
+        
+        try {
+          await this.$store.dispatch("createRecord", {
+            category: this.category,
+            amount: this.amount,
+            description: this.description,
+            type: this.type,
+            // toJSON() - используем для корректной записи даты в firebase
+            date: new Date().toJSON()
+          });
+
+        } catch(e){}
+        
+
+      } else {
+        this.$message(`На счёте не достаточно ${this.amount - this.info.bill}` );
+      }
+
     }
   }, 
   async mounted(){
@@ -171,8 +204,7 @@ export default {
     //3) 
     await this.$nextTick;    
     this.select = window.M.FormSelect.init(this.$refs.select);
-    window.M.updateTextFields();
-      
+    window.M.updateTextFields();      
     
   },
   destroyed(){
