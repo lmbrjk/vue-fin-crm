@@ -19,12 +19,11 @@
     v-else
     v-on:submit.prevent="submitHandler"
 
-
     class="form"
   >
     <div class="input-field" >
       <select
-        v-model="current"
+        v-model="categoryName"
         ref="select"
       >
         <option
@@ -127,7 +126,6 @@ export default {
     return {
       categories: [],
       select: null,
-      current: null,
       categoryName: '',
       type: "outcome",
       amount: 1,
@@ -163,7 +161,7 @@ export default {
         try {
           // записываем в БД созданную запись
           await this.$store.dispatch("createRecord", {
-            category: this.category,
+            categoryName: this.categoryName,
             amount: this.amount,
             description: this.description,
             type: this.type,
@@ -178,10 +176,11 @@ export default {
             ? this.info.bill + this.amount
             : this.info.bill - this.amount
 
+          // обновляем в БД общую сумму
           await this.$store.dispatch("updateInfo", {bill});
 
           this.$message("Запись создана");
-          this.$v.reset();
+          this.$v.$reset();
           this.amount = 1;
           this.description = "";
 
@@ -197,7 +196,7 @@ export default {
     this.loading = false;
 
     if(this.categories.length){
-      this.current = this.categories[0].id;
+      this.categoryName = this.categories[0].id;
     }  
 
     // несколько вариантов решения задачи синхронности

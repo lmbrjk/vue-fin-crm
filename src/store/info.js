@@ -23,7 +23,11 @@ export default {
                 // т.к. в БД мы должны обновить только одно свойство
                 const updateData = {...getters.info, ...toUpdate};
 
-                await firebase.database().ref(`/users/${uid}/info`).update(updateData);                
+                await firebase.database().ref(`/users/${uid}/info`).update(updateData);
+                
+                console.log("updateInfo is OK")
+
+                commit("setInfo", updateData);
 
             } catch(e){
                 commit("setError", e);
