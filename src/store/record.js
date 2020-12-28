@@ -4,8 +4,6 @@ export default {
     actions: {
         async createRecord({dispatch, commit}, record){
             try {
-                console.log(record);
-
                 // получаем uid пользователя для записи категории пользователю который
                 // сейчас работает с CRM
                 const uid = await dispatch("getUid");
@@ -23,7 +21,7 @@ export default {
                 // сейчас работает с CRM
                 const uid = await dispatch("getUid");
 
-                const records = (await firebase.database().ref(`/users/${uid}/records`).once("value").val() || {}) ;
+                const records = (await firebase.database().ref(`/users/${uid}/records`).once("value")).val() || {};
 
                 return (Object.keys(records).map(key => ({ ...records[key], id: key})));
 
