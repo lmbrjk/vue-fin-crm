@@ -16,6 +16,21 @@ export default {
                 commit("setError", e);
                 throw e;
             }
+        },
+        async fetchRecords({dispatch, commit}){
+            try {
+                // получаем uid пользователя для записи категории пользователю который
+                // сейчас работает с CRM
+                const uid = await dispatch("getUid");
+
+                const records = (await firebase.database().ref(`/users/${uid}/records`).once("value").val() || {}) ;
+
+                return (Object.keys(records).map(key => ({ ...records[key], id: key})));
+
+            } catch(e){
+                commit("setError", e);
+                throw e;
+            }
         }
     }
 }
