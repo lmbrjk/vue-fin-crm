@@ -27,11 +27,14 @@
                     <strong>{{ cat.categoryName }}:</strong>
                     {{ cat.spend }} из {{ cat.limit }}
                 </p>
-                <div class="progress" >
+                <div
+                    v-tooltip="cat.tooltip" 
+                    class="progress"
+                >
                     <div
                         class="determinate"
                         v-bind:class="[cat.progressColor]"
-                        v-bind:style="{width: cat.progressPercent}"
+                        v-bind:style="{width: cat.progressPercent + '%'}"
                     >
                     </div>
                 </div>
@@ -42,6 +45,8 @@
 
 <script>
 import {mapGetters} from "vuex"
+// для использования данного фильтра с tooltip
+import currencyFilter from "@/filters/currency.filter"
 
 export default {
     data(){
@@ -55,7 +60,7 @@ export default {
     },
     async mounted(){
         const records = await this.$store.dispatch("fetchRecords");
-        console.log(records)
+
         // не помещаем categories в модель, т.е. this.categories т.к. 
         // нужно снала модифицировать данные с бэкэнда
         const categories = await this.$store.dispatch("fetchCategories");
@@ -63,9 +68,9 @@ export default {
         this.categories = categories.map( cat => {
             const spend = records
                 // отбираем все записи для данной категории cat
-                .filter( r => { r.id === cat.id })
+                .filter( r => r.categoryName === cat.id)
                 // отбираем расходы
-                .filter( r => { r.type === "outcome" })
+                .filter( r => r.type === "outcome")
                 // складываем расходы
                 .reduce( (total, record) => {
                     return total += +record.amount
@@ -80,25 +85,23 @@ export default {
                 ? "green"
                 : percent < 100
                     ? "yellow"
-                    : "red";
+                    : "red";            
 
-            console.log({
-                ...cat,
-                progressPercent,
-                progressColor,
-                spend
-            });
+            // 1) текст для tooltip
+            // 2) currencyFilter - в html-теге использовать не получится поэтому
+            // мы его импортировали выше и применили как функцию
+            const tooltipValue = cat.limit - spend;
+            const tooltip = `${tooltipValue < 0 ? "Лимит превышен на" : "Можно потратить ещё"} ${currencyFilter(Math.abs(tooltipValue))}`
 
             return {
                 ...cat,
                 progressPercent,
                 progressColor,
-                spend
+                spend,
+                tooltip
             }
 
         });
-
-        console.log(this.categories)
 
         this.loading = false;
     }
