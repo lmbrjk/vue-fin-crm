@@ -41,6 +41,7 @@
 <script>
 import Navbar from '@/components/app/Navbar.vue'
 import Sidebar from '@/components/app/Sidebar.vue'
+import messages from "@/utils/messages"
 
 export default {
   name: 'main-layout',
@@ -51,6 +52,20 @@ export default {
     return {
       isShow: true,
       loading: true
+    }
+  },
+  computed: {
+    error(){
+      // возращаем error из store
+      // если что-то будет меняться в $store.getters то 
+      // будет обновляться это свойство ( error() )  
+      return this.$store.getters.error
+    }
+  },
+  watch: {
+    error(fdError){
+      this.$error(messages[fdError.code] || "Что-то пошло не так");
+
     }
   },
   async mounted(){

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import firebase from 'firebase/app'
 
 Vue.use(VueRouter)
 
@@ -19,43 +20,43 @@ const routes = [
   {
     path: '/categories',
     name: 'categories',
-    meta: { layout: 'main'},
+    meta: { layout: 'main', auth: true},
     component: () => import('../views/Categories.vue')
   },
   {
     path: '/detail',
     name: 'detail',
-    meta: { layout: 'main'},
+    meta: { layout: 'main', auth: true},
     component: () => import('../views/Detail.vue')
   },
   {
     path: '/history',
     name: 'history',
-    meta: { layout: 'main'},
+    meta: { layout: 'main', auth: true},
     component: () => import('../views/History.vue')
   },
   {
     path: '/',
     name: 'home',
-    meta: { layout: 'main'},
+    meta: { layout: 'main', auth: true},
     component: () => import('../views/Home.vue')
   },
   {
     path: '/planning',
     name: 'planning',
-    meta: { layout: 'main'},
+    meta: { layout: 'main', auth: true},
     component: () => import('../views/Planning.vue')
   },
   {
     path: '/profile',
     name: 'profile',
-    meta: { layout: 'main'},
+    meta: { layout: 'main', auth: true},
     component: () => import('../views/Profile.vue')
   },
   {
     path: '/record',
     name: 'record',
-    meta: { layout: 'main'},
+    meta: { layout: 'main', auth: true},
     component: () => import('../views/Record.vue')
   }
 ]
@@ -65,5 +66,24 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
+
+
+router.beforeEach( (to, from, next) => {
+  // смотрим залогинился ли пользователь
+  const currentUser = firebase.auth().currentUser;
+
+  const requireAuth = to.matched.some(record => record.meta.auth);
+
+  // если requireAuth = true и нет такого currentUser, то
+  // редиректим такого пользователя на главную страницу с 
+  // сообщением (message=login, где login - свойство, отвечающее за
+  // текст сообщения. Данное свойство находится в файле utils/messages.js)
+  if(requireAuth && !currentUser){
+    next("/login?message=login");
+  } else {
+    next();
+  }
+});
+
 
 export default router
