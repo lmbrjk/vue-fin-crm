@@ -3,29 +3,48 @@
         <Loader 
             v-if="loading"
         />
+       
+
         <div
-            v-else
+            v-else-if="record"
         >
             <div class="breadcrumb-wrap">
-                <a href="/history" class="breadcrumb">История</a>
-                <a class="breadcrumb">
-                    Расход
+                <router-link 
+                    to="/history" 
+                    class="breadcrumb"
+                >
+                    История
+                </router-link>
+                <a 
+                    v-on:click.prevent
+                    class="breadcrumb"
+                >
+                    {{ record.type === "income" ? "Доход" : "Расход" }}
                 </a>
             </div>
             <div class="row">
                 <div class="col s12 m6">
-                    <div class="card red">
+                    <div 
+                        v-bind:class="{green: record.type === 'income', red: record.type === 'outcome'  }"
+                        class="card"
+                    >
                         <div class="card-content white-text">
-                            <p>Описание:</p>
-                            <p>Сумма:</p>
-                            <p>Категория:</p>
+                            <p>Описание: {{ record.description }}</p>
+                            <p>Сумма: {{ record.amount | currency("RUB") }}</p>
+                            <p>Категория: {{ record.categoryName }}</p>
 
-                            <small>12.12.12</small>
+                            <small>{{ record.date | date("datetime") }}</small>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <p 
+            v-else
+            class="center"
+        >
+            Такой записи нет.
+        </p>
     </div>
 </template>
 
@@ -34,7 +53,6 @@ export default {
     data(){
         return {
             record: [],
-            category: [],
             loading: true
         }
     },
@@ -47,8 +65,12 @@ export default {
             
             const category = await this.$store.dispatch("getCategoryById", record.categoryName);
 
-            /* ** */
-            this.record = {};
+            this.record = {
+                ...record,
+                categoryName: category.categoryName
+            };  
+            
+            console.log(this.record)
 
             this.loading = false;
 
