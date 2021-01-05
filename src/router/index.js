@@ -6,6 +6,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '*',
+    meta: { layout: 'empty', auth: true},
+    component: () => import('../views/Login.vue')
+  },
+  {
     path: '/login',
     name: 'login',
     meta: { layout: 'empty'},
@@ -24,10 +29,10 @@ const routes = [
     component: () => import('../views/Categories.vue')
   },
   {
-    path: '/detail',
+    path: '/detail/:id',
     name: 'detail',
     meta: { layout: 'main', auth: true},
-    component: () => import('../views/Detail.vue')
+    component: () => import('../views/Detail.vue'),
   },
   {
     path: '/history',

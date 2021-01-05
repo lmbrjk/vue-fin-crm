@@ -13,6 +13,13 @@
       v-if="loading"
     />
 
+    <p 
+      v-else-if="!records.length"
+      class="center"
+    >
+      Пока что нет записей о расходах и доходах. <router-link to="/record">Создайте первую</router-link>
+    </p>
+
     <HistoryTable 
       v-else
       v-bind:records="records"
@@ -34,21 +41,19 @@ export default {
     }
   },
   async mounted(){
-    // this.categories = await this.$store.dispatch("fetchCategories");
     const categories = await this.$store.dispatch("fetchCategories");
 
     const records = await this.$store.dispatch("fetchRecords");
 
-    categories.forEach( (cat) => {
-      records.forEach( (record) => {
-        if( record.categoryName == cat.id){
-          record.categoryName = cat.categoryName; 
-        }
-      })
-    });    
+    this.records = records.map( record => {
+      return {
+        ...record,
+        categoryName: categories.find( category => category.id == record.categoryName).categoryName,
+        typeClass: record.type === "outcome" ? "red" : "green",
+        typeText: record.type === "outcome" ? "Расход" : "Доход",
+      }
+    });
     
-    this.records = records;
-
     this.loading = false;
   }
 }

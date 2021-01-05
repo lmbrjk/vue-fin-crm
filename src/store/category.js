@@ -50,7 +50,26 @@ export default {
                 commit("setError", e);
                 throw e;
             }
-        }       
+        },
+        async getCategoryById({commit, dispatch}, id){
+            try{
+                // получаем uid пользователя для записи категории пользователю который
+                // сейчас работает с CRM
+                const uid = await dispatch("getUid");
+
+                const category = (await firebase.database().ref(`/users/${uid}/categories`).child(id).once("value")).val() || {};
+
+                // 1) изначально firebase нам присылает категорию в следующем виде:
+                // {key: {categoryName: "имя категории", limit: число установленного лимита}}
+                // 2) переделываем в следующий вид:
+                // {categoryName: "имя категории", limit: число установленного лимита, id: "key"}
+                return {...category, id };
+
+            } catch(e){
+                commit("setError", e);
+                throw e;
+            }
+        },      
 
     }
 }

@@ -14,7 +14,7 @@
       <tbody>
         <tr
             v-for="(record, index) of records"
-            v-bind:key="index"
+            v-bind:key="record.id"
         >
             <td>{{ index + 1 }}</td>
             <td>{{ record.amount | currency("RUB") }}</td>
@@ -22,20 +22,18 @@
             <td>{{ record.categoryName }}</td>
             <td>
                 <span 
-                    v-if="record.type === 'outcome'"
-                    class="white-text badge red"
+                    v-bind:class="[record.typeClass]"
+                    class="white-text badge"
                 >
-                    Расход
-                </span>
-                <span 
-                    v-else
-                    class="white-text badge green"
-                >
-                    Доход
+                    {{ record.typeText }}
                 </span>
             </td>
             <td>
-                <button class="btn-small btn">
+                <button 
+                    v-on:click="$router.push('/detail/' + record.id)"
+                    v-tooltip="'Посмотреть подробней'"
+                    class="btn-small btn"
+                >
                     <i class="material-icons">open_in_new</i>
                 </button>
             </td>
@@ -46,7 +44,11 @@
 
 <script>
 export default {
-    props: ["records"],
-    mounted() {}
+    props: {
+        records : {
+            type: Array,
+            required: true
+        }
+    }
 }
 </script>
