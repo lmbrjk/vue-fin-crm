@@ -24,6 +24,15 @@
       v-else
       v-bind:records="records"
     />
+
+    <Paginate 
+      :page-count="20"
+      :click-handler="pageChangeHandler"
+      :prev-text="'Назад'"
+      :next-text="'Вперёд'"
+      :container-class="'pagination'"
+      :page-class="'waves-effect'"
+    />
   </section>
 </div>
 </template>
@@ -39,6 +48,9 @@ export default {
       records: [],
       loading: true
     }
+  },
+  methods: {
+    pageChangeHandler(){}
   },
   async mounted(){
     const categories = await this.$store.dispatch("fetchCategories");
