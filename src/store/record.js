@@ -23,7 +23,7 @@ export default {
 
                 const records = (await firebase.database().ref(`/users/${uid}/records`).once("value")).val() || {};
 
-                return (Object.keys(records).map(key => ({ ...records[key], id: key})));
+                return Object.keys(records).map(key => ({ ...records[key], id: key}));
 
             } catch(e){
                 commit("setError", e);
