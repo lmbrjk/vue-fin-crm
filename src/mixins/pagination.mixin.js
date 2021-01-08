@@ -1,7 +1,8 @@
 export default {
     data(){
         return {
-            //проверяем есть ли в роуте query-параметр page
+            //проверяем есть ли в роуте query-параметр page и
+            // если есть преобразуем в число
             page: +this.$route.query.page || 1,
             pageSize: 5,
             pageCount: 0,
