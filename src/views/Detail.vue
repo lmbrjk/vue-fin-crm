@@ -2,8 +2,7 @@
     <div>
         <Loader 
             v-if="loading"
-        />
-       
+        />       
 
         <div
             v-else-if="record"
@@ -25,7 +24,7 @@
             <div class="row">
                 <div class="col s12 m6">
                     <div 
-                        v-bind:class="{green: record.type === 'income', red: record.type === 'outcome'  }"
+                        v-bind:class="{green: record.type === 'income', red: record.type === 'outcome'}"
                         class="card"
                     >
                         <div class="card-content white-text">
@@ -68,9 +67,7 @@ export default {
             this.record = {
                 ...record,
                 categoryName: category.categoryName
-            };  
-            
-            console.log(this.record)
+            };
 
             this.loading = false;
 
