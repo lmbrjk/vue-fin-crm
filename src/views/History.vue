@@ -68,10 +68,7 @@ export default {
         typeClass: record.type === "outcome" ? "red" : "green",
         typeText: record.type === "outcome" ? "Расход" : "Доход",
       }
-    }));
-
-    console.log(categories)
-    console.log(this.records)
+    }));    
 
     this.renderChart({
         labels: categories.map( c => c.categoryName ),
