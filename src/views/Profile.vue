@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="page-title">
-    <h3>Профиль</h3>
+    <h3>{{ "ProfileTitle" | localize }}</h3>
   </div>
 
   <form 
@@ -16,32 +16,35 @@
         id="description"
         type="text"
       >
-      <label for="description">Имя</label>
+      <label for="description">{{ "Name" | localize }}</label>
       <small
         v-if="$v.name.$dirty && !$v.name.required"
         class="helper-text invalid"
       >
-        Поле не должно быть пустым
+        {{ "invalidNameEmpty" | localize }}
       </small>
       <small
         v-else-if="$v.name.$dirty && !$v.name.minLength"
         class="helper-text invalid"
       >
-        Имя должно быть не менее {{ $v.name.$params.minLength.min }} символов
+        {{ "invalidNameMinLength" | localize }}
       </small>
     </div>
 
     <div class="switch">
       <label>
         English
-        <input type="checkbox">
+        <input 
+          v-model="isRuLocale"
+          type="checkbox"
+        >
         <span class="lever"></span>
         Русский
       </label>
     </div>
 
     <button class="btn waves-effect waves-light" type="submit">
-      Обновить
+      {{ "Update" | localize }}
       <i class="material-icons right">send</i>
     </button>
   </form>
@@ -56,7 +59,8 @@ import messages from "@/utils/messages"
 export default {
   data(){
     return {
-      name: ""
+      name: "",
+      isRuLocale: true
     }
   },
   validations: {
@@ -73,13 +77,21 @@ export default {
       }
 
       try {
-        await this.$store.dispatch("updateInfo", {name: this.name});
+        await this.$store.dispatch("updateInfo", {
+          name: this.name,
+          locale: this.isRuLocale ? "ru-RU" : "en-US"
+        });
+
       } catch (e){}
 
     }
   },
   async mounted(){
     this.name = this.info.name;
+
+    // this.info.locale === "ru-RU" то this.isRuLocale = true и 
+    // свитч будет в положении "Русский"
+    this.isRuLocale = this.info.locale === "ru-RU";
 
     // чтобы правильно сработал window.M.updateTextFields(); 
     await this.$nextTick;

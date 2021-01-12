@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="page-title">
-            <h3>Планирование</h3>
+            <h3>{{ "Menu_Planning" | localize }}</h3>
             <h4>{{ info.bill | currency("RUB") }}</h4>
         </div>
 
@@ -13,7 +13,7 @@
             v-else-if="!categories.length"
             class="center"
         >
-            Категорий пока что нет. <router-link to="/categories">Создайте первую</router-link>
+            Категорий пока что нет. <router-link to="/categories">{{ "CreateRecord" | localize }}</router-link>
         </p>
 
         <section

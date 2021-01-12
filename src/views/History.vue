@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="page-title">
-    <h3>История записей</h3>
+    <h3>{{ "RecordHistory" | localize }}</h3>
   </div>
 
   <div class="history-chart">
@@ -17,7 +17,7 @@
       v-else-if="!records.length"
       class="center"
     >
-      Пока что нет записей о расходах и доходах. <router-link to="/record">Создайте первую</router-link>
+      {{ "NoRecords" | localize }} <router-link to="/record">{{ "CreateRecord" | localize }}</router-link>
     </p>
 
     <HistoryTable 

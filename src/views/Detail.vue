@@ -12,7 +12,7 @@
                     to="/history" 
                     class="breadcrumb"
                 >
-                    История
+                    {{ "History" | localize }}
                 </router-link>
                 <a 
                     v-on:click.prevent
@@ -28,9 +28,9 @@
                         class="card"
                     >
                         <div class="card-content white-text">
-                            <p>Описание: {{ record.description }}</p>
-                            <p>Сумма: {{ record.amount | currency("RUB") }}</p>
-                            <p>Категория: {{ record.categoryName }}</p>
+                            <p>{{ "Description" | localize }}: {{ record.description }}</p>
+                            <p>{{ "TheAmount" | localize }}: {{ record.amount | currency("RUB") }}</p>
+                            <p>{{ "Category" | localize }}: {{ record.categoryName }}</p>
 
                             <small>{{ record.date | date("datetime") }}</small>
                         </div>
@@ -42,7 +42,7 @@
             v-else
             class="center"
         >
-            Такой записи нет.
+            {{ "NoRecord" | localize }}
         </p>
     </div>
 </template>
