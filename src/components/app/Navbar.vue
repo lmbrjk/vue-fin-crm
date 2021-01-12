@@ -29,7 +29,7 @@
                   to="/profile" 
                   class="black-text"
                 >
-                  <i class="material-icons">account_circle</i>Профиль
+                  <i class="material-icons">account_circle</i>{{ "ProfileTitle" | localize }}
                 </router-link>
               </li>
               <li class="divider" tabindex="-1"></li>
@@ -38,7 +38,7 @@
                   v-on:click.prevent="logout"
                   class="black-text"
                 >
-                  <i class="material-icons">assignment_return</i>Выйти
+                  <i class="material-icons">assignment_return</i>{{ "Logout" | localize }}
                 </a>
               </li>
             </ul>

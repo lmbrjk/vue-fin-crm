@@ -2,7 +2,7 @@
     "ProfileTitle": "Profile",
     "Name": "Name",
     "invalidNameEmpty": "The field should not be empty",
-    "invalidNameMinLength": "The name must be at least {{ $v.name.$params.minLength.min }} characters",
+    "invalidNameMinLength": "Characters must be at least ",
     "Update": "Update",
     "Menu_Bill": "Bill",
     "Menu_History": "History",
@@ -29,11 +29,25 @@
     "SelectCategorie": "Select a category",
     "Income": "Income",
     "Outcome": "Outcome",
-    "invalidMinValue": "The number cannot be less than {{ $v.amount.$params.minValue.min }}",
+    "invalidMinValue": "The number cannot be less than",
     "Create": "Create",
     "Title": "Title",
     "EnterNameCategory": "Enter a name for the category",
-    "Limit": "Limit"
-
-
+    "Limit": "Limit",
+    "Edit": "Edit",
+    "Logout": "Logout",
+    "Back": "Back",
+    "Forward": "Forward",
+    "ExceedingLimit": "Limit exceeded by",
+    "CanSpend": "You can spend another",
+    "Message_EmailRequired": "Email field is required",
+    "Message_EmailValid": "Enter valid email",
+    "Message_EnterPassword": "Enter password",
+    "Password": "Password",
+    "Login": "Login",
+    "NoAccount": "Has no account?",
+    "CRM_Title": "CRM Home Accounting",
+    "Message_EnterName": "Enter name",
+    "AcceptRules": "Agree with rules",
+    "HasAccount": "Has account?"
 }

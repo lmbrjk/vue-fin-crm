@@ -47,6 +47,7 @@
 import {mapGetters} from "vuex"
 // для использования данного фильтра с tooltip
 import currencyFilter from "@/filters/currency.filter"
+import localizeFilter from "@/filters/localize.filter"
 
 export default {
     data(){
@@ -91,7 +92,7 @@ export default {
             // 2) currencyFilter - в html-теге использовать не получится поэтому
             // мы его импортировали выше и применили как функцию
             const tooltipValue = cat.limit - spend;
-            const tooltip = `${tooltipValue < 0 ? "Лимит превышен на" : "Можно потратить ещё"} ${currencyFilter(Math.abs(tooltipValue))}`
+            const tooltip = `${tooltipValue < 0 ? localizeFilter("ExceedingLimit") : localizeFilter("CanSpend")} ${currencyFilter(Math.abs(tooltipValue))}`
 
             return {
                 ...cat,

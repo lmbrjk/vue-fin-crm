@@ -18,7 +18,7 @@
                     v-on:click.prevent
                     class="breadcrumb"
                 >
-                    {{ record.type === "income" ? "Доход" : "Расход" }}
+                    {{ record.type === "income" ? "Income" : "Outcome" | localize}}
                 </a>
             </div>
             <div class="row">

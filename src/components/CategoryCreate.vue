@@ -78,7 +78,6 @@ export default {
                 return
             }
 
-
             try{
                 const category = await this.$store.dispatch("createCategory", {
                     categoryName: this.categoryName,

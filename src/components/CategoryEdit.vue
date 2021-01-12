@@ -2,7 +2,7 @@
     <div class="col s12 m6">
         <div>
             <div class="page-subtitle">
-                <h4>Редактировать</h4>
+                <h4>{{ "Edit" | localize }}</h4>
             </div>
 
             <form v-on:submit.prevent="submitHandler">
@@ -19,7 +19,7 @@
                         {{ category.categoryName }}
                     </option>
                 </select>
-                <label>Выберите категорию</label>
+                <label>{{ "SelectCategorie" | localize }}</label>
                 </div>
 
                 <div class="input-field">
@@ -30,12 +30,12 @@
                         id="name"
                         type="text"
                     >
-                    <label for="name">Название</label>
+                    <label for="name">{{ "Title" | localize }}</label>
                     <span
                         v-if="$v.categoryName.$dirty && !$v.categoryName.required"
                         class="helper-text invalid"
                     >
-                        Введите имя категории
+                        {{ "invalidNameEmpty" | localize }}
                     </span>
                 </div>
 
@@ -47,23 +47,23 @@
                         id="limit"
                         type="number"
                     >
-                    <label for="limit">Лимит</label>
+                    <label for="limit">{{ "Limit" | localize }}</label>
                     <span
                         v-if="$v.limit.$dirty && !$v.limit.minValue "
                         class="helper-text invalid"
                     >
-                        Минимальное значение {{ $v.limit.$params.minValue.min }}
+                        {{ "invalidMinValue" | localize }} {{ $v.limit.$params.minValue.min }}
                     </span>
                     <span
                         v-else-if="$v.limit.$dirty && !$v.limit.required "
                         class="helper-text invalid"
                     >
-                        Поле не должно быть пустым
+                        {{ "invalidNameEmpty" | localize }}
                     </span>
                 </div>
 
                 <button class="btn waves-effect waves-light" type="submit">
-                    Обновить
+                    {{ "Update" | localize }}
                     <i class="material-icons right">send</i>
                 </button>
             </form>
